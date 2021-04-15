@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
                 if (enemy != null)
                 {
                     CanAttack = false;
-                    StartCoroutine(StartAttackTimer());
+                    StartCoroutine(SetAttackTimer());
                     enemy.SetDamage(50.0f);
                 }
             }
@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         //die
     }
 
-    private IEnumerator StartAttackTimer()
+    private IEnumerator SetAttackTimer()
     {
         while (AttackTimer > 0.0f)
         {

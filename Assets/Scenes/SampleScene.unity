@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 703f7cb75a4bcc840aac9dbbbd25f713, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -465,7 +465,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &700764247699263559
+--- !u!1001 &2136268508
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -536,6 +536,10 @@ PrefabInstance:
     - target: {fileID: 5792812899200514432, guid: f1d1c55e48a1a9643bed684bfe71d88b, type: 3}
       propertyPath: AttackRange
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5792812899200514435, guid: f1d1c55e48a1a9643bed684bfe71d88b, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5792812899200514494, guid: f1d1c55e48a1a9643bed684bfe71d88b, type: 3}
       propertyPath: m_RootOrder
