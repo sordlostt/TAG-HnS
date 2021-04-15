@@ -9,11 +9,13 @@ public class PlayerControls : MonoBehaviour
 
     Camera MainCamera;
     Player Player;
+    Rigidbody PlayerRigidbody;
 
     private void Start()
     {
         MainCamera = Camera.main;
         Player = GameManager.instance.GetPlayer();
+        PlayerRigidbody = gameObject.GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -27,9 +29,18 @@ public class PlayerControls : MonoBehaviour
         if (Physics.Raycast(cameraRay, out hit, float.PositiveInfinity, floorMask))
         {
             Debug.DrawLine(cameraRay.origin, hit.point, Color.red);
-            Player.transform.LookAt(hit.point, Player.transform.up);
+            Vector3 hitPointAdjusted = new Vector3(hit.point.x, Player.transform.position.y, hit.point.z);
+            Player.transform.LookAt(hitPointAdjusted, Player.transform.up);
         }
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            Player.Attack();
+        }
+    }
 
+    private void FixedUpdate()
+    {
         Vector3 moveVector = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W))
@@ -52,6 +63,16 @@ public class PlayerControls : MonoBehaviour
             moveVector += Vector3.right;
         }
 
-        Player.transform.Translate(moveVector * MovementSpeed * Time.deltaTime, Space.World);
+        PlayerRigidbody.velocity = (moveVector.normalized * MovementSpeed);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        // nullify all velocity or angular velocity gained from colliding with enemies
+        if (collision.gameObject.tag == "Enemy")
+        {
+            PlayerRigidbody.velocity = Vector3.zero;
+            PlayerRigidbody.angularVelocity = Vector3.zero;
+        }
     }
 }
