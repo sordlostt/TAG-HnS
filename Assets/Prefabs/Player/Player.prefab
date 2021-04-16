@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 4
+  minMouseFromPlayerDistance: 0
 --- !u!114 &5792812899200514432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,7 +203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96c7d823c46c174a98f482ffee4b23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDelay: 0
+  maxHealth: 100
+  attackDelay: 1
 --- !u!114 &4884921264612865854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,10 +229,10 @@ Rigidbody:
   m_Mass: 70
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 84
+  m_Interpolate: 1
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!95 &1002588300009412375
 Animator:

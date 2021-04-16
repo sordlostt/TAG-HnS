@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, ICharacter
 {
+    public float maxHealth;
     private float health = 100.0f;
 
     [SerializeField]
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour, ICharacter
     {
         attackTimer = attackDelay;
         animationManager = gameObject.GetComponent<PlayerAnimationManager>();
+        health = maxHealth;
     }
 
     public void Attack()
@@ -31,14 +33,26 @@ public class Player : MonoBehaviour, ICharacter
         }
     }
 
-    public void SetDamage(float damage)
+    public void SetDamage(float damage, ICharacter attacker)
     {
-        health -= damage;
-
-        if (health <= 0.0f)
+        if (attacker is Enemy)
         {
-            OnDeath();
+            health -= damage;
+
+            if (health <= 0.0f && GameManager.instance.GetGameState() == GameManager.GameState.PLAYING)
+            {
+                OnDeath();
+            }
+            else
+            {
+                animationManager.TriggerDamage();
+            }
         }
+    }
+
+    public float GetHealth()
+    {
+        return health;
     }
 
     public void OnAttackBegin()
@@ -58,6 +72,8 @@ public class Player : MonoBehaviour, ICharacter
 
     private void OnDeath()
     {
+        animationManager.SetDying();
+        GameManager.instance.OnPlayerDied();
         //die
     }
 

@@ -38,17 +38,20 @@ public class Enemy : MonoBehaviour, ICharacter
         animationManager = gameObject.GetComponent<EnemyAnimationManager>();
     }
 
-    public void SetDamage(float damage)
+    public void SetDamage(float damage, ICharacter attacker)
     {
-        health -= damage;
+        if (attacker is Player)
+        {
+            health -= damage;
 
-        if (health <= 0.0f)
-        {
-            OnDeath();
-        }
-        else
-        {
-            animationManager.TriggerOnDamage();
+            if (health <= 0.0f)
+            {
+                OnDeath();
+            }
+            else
+            {
+                animationManager.TriggerOnDamage();
+            }
         }
     }
 
@@ -103,9 +106,9 @@ public class Enemy : MonoBehaviour, ICharacter
             yield return null;
         }
 
-        while (gameObject.transform.position.y > -10.0f)
+        while (gameObject.transform.position.y > -1.0f)
         {
-            gameObject.transform.Translate(Vector3.down * fadingSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * fadingSpeed * Time.deltaTime);
             yield return null;
         }
 

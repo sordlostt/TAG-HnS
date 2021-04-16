@@ -31,7 +31,7 @@ public class Weapon : MonoBehaviour
             ICharacter character = other.gameObject.GetComponentInParent<ICharacter>();
             if (character != null && hitCharacters.Add(character) && character != owner)
             {
-                character.SetDamage(damage);
+                character.SetDamage(damage, owner);
             }
         }
     }

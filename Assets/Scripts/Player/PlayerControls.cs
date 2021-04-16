@@ -6,6 +6,8 @@ public class PlayerControls : MonoBehaviour
 {
     [SerializeField]
     float movementSpeed;
+    [SerializeField]
+    float minMouseFromPlayerDistance;
 
     Camera mainCamera;
     Player player;
@@ -21,50 +23,61 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
-        RaycastHit hit;
-        Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        LayerMask floorMask = LayerMask.GetMask("Camera Ray Layer");
-
-        Debug.DrawRay(player.transform.position, player.transform.forward * 5.0f, Color.green);
-
-        if (Physics.Raycast(cameraRay, out hit, float.PositiveInfinity, floorMask))
+        if (GameManager.instance.GetGameState() == GameManager.GameState.PLAYING)
         {
-            Debug.DrawLine(cameraRay.origin, hit.point, Color.red);
-            Vector3 hitPointYAdjusted = new Vector3(hit.point.x, player.transform.position.y, hit.point.z);
-            player.transform.LookAt(hitPointYAdjusted, player.transform.up);
-        }
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-            player.Attack();
+            RaycastHit hit;
+            Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+            LayerMask floorMask = LayerMask.GetMask("Camera Ray Layer");
+
+            Debug.DrawRay(player.transform.position, player.transform.forward * 5.0f, Color.green);
+
+            if (Physics.Raycast(cameraRay, out hit, float.PositiveInfinity, floorMask))
+            {
+                Debug.DrawLine(cameraRay.origin, hit.point, Color.red);
+                Vector3 hitPointYAdjusted = new Vector3(hit.point.x, player.transform.position.y, hit.point.z);
+                if (Vector3.Distance(hitPointYAdjusted, player.transform.position) >= minMouseFromPlayerDistance)
+                {
+                    player.transform.LookAt(hitPointYAdjusted, player.transform.up);
+                }
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                player.Attack();
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        Vector3 moveVector = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.W))
+        if (GameManager.instance.GetGameState() == GameManager.GameState.PLAYING)
         {
-            moveVector += Vector3.forward;
-        }
+            Vector3 moveVector = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveVector += Vector3.back;
-        }
+            if (Input.GetKey(KeyCode.W))
+            {
+                moveVector += Vector3.forward;
+            }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveVector += Vector3.left;
-        }
+            if (Input.GetKey(KeyCode.S))
+            {
+                moveVector += Vector3.back;
+            }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveVector += Vector3.right;
-        }
+            if (Input.GetKey(KeyCode.A))
+            {
+                moveVector += Vector3.left;
+            }
 
-        playerRigidbody.velocity = (moveVector.normalized * movementSpeed);
+            if (Input.GetKey(KeyCode.D))
+            {
+                moveVector += Vector3.right;
+            }
+
+            playerRigidbody.velocity = (moveVector.normalized * movementSpeed);
+            //always zero out the angular velocity
+            playerRigidbody.angularVelocity = Vector3.zero;
+        }
     }
 
     private void OnCollisionExit(Collision collision)

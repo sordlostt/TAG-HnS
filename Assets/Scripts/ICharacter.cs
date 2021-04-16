@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ICharacter
 {
-    public void SetDamage(float damage);
+    public void SetDamage(float damage, ICharacter attacker);
 
     public bool IsAttacking();
 

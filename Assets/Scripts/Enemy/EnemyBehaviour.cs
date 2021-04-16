@@ -29,6 +29,10 @@ public class EnemyBehaviour : MonoBehaviour
         {
             FollowPlayer();
 
+            // zero out rigidbody velocity and angular velocity
+            enemyRigidbody.velocity = Vector3.zero;
+            enemyRigidbody.angularVelocity = Vector3.zero;
+
             // stop the walking animation after crossing the navAgent stopping distance
             if (Vector3.Distance(player.transform.position, enemy.transform.position) <= navAgent.stoppingDistance)
             {
@@ -47,7 +51,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else
         {
-            enemyRigidbody.Sleep();
+            enemyRigidbody.isKinematic = true;
             animationManager.SetDying(true);
             animationManager.SetWalking(false);
         }
