@@ -10,12 +10,14 @@ public class PlayerControls : MonoBehaviour
     Camera MainCamera;
     Player Player;
     Rigidbody PlayerRigidbody;
+    PlayerAnimationManager AnimationManager;
 
     private void Start()
     {
         MainCamera = Camera.main;
         Player = GameManager.instance.GetPlayer();
         PlayerRigidbody = gameObject.GetComponent<Rigidbody>();
+        AnimationManager = gameObject.GetComponent<PlayerAnimationManager>();
     }
 
     private void Update()
@@ -35,6 +37,7 @@ public class PlayerControls : MonoBehaviour
         
         if (Input.GetMouseButtonDown(0))
         {
+            AnimationManager.TriggerAttack();
             Player.Attack();
         }
     }

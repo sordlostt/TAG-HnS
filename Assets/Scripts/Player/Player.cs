@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public Transform AttackPoint;
 
     private float AttackTimer;
-    private bool CanAttack = true;
+    public bool CanAttack = true;
 
     private void Awake()
     {

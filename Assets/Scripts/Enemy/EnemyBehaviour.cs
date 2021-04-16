@@ -59,6 +59,7 @@ public class EnemyBehaviour : MonoBehaviour
         else
         {
             NavAgent.isStopped = true;
+            EnemyRigidbody.Sleep();
             AnimationManager.SetDying(true);
             AnimationManager.SetWalking(false);
         }

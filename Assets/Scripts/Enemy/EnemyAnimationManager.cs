@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyAnimationManager : MonoBehaviour
 {
     public Animator Animator;
+    public Player Player;
 
     public void SetWalking(bool value)
     {
