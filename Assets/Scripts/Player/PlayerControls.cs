@@ -5,40 +5,38 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
     [SerializeField]
-    float MovementSpeed;
+    float movementSpeed;
 
-    Camera MainCamera;
-    Player Player;
-    Rigidbody PlayerRigidbody;
-    PlayerAnimationManager AnimationManager;
+    Camera mainCamera;
+    Player player;
+    Rigidbody playerRigidbody;
+
 
     private void Start()
     {
-        MainCamera = Camera.main;
-        Player = GameManager.instance.GetPlayer();
-        PlayerRigidbody = gameObject.GetComponent<Rigidbody>();
-        AnimationManager = gameObject.GetComponent<PlayerAnimationManager>();
+        mainCamera = Camera.main;
+        player = GameManager.instance.GetPlayer();
+        playerRigidbody = gameObject.GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         RaycastHit hit;
-        Ray cameraRay = MainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         LayerMask floorMask = LayerMask.GetMask("Camera Ray Layer");
 
-        Debug.DrawRay(Player.transform.position, Player.transform.forward * 5.0f, Color.green);
+        Debug.DrawRay(player.transform.position, player.transform.forward * 5.0f, Color.green);
 
         if (Physics.Raycast(cameraRay, out hit, float.PositiveInfinity, floorMask))
         {
             Debug.DrawLine(cameraRay.origin, hit.point, Color.red);
-            Vector3 hitPointAdjusted = new Vector3(hit.point.x, Player.transform.position.y, hit.point.z);
-            Player.transform.LookAt(hitPointAdjusted, Player.transform.up);
+            Vector3 hitPointYAdjusted = new Vector3(hit.point.x, player.transform.position.y, hit.point.z);
+            player.transform.LookAt(hitPointYAdjusted, player.transform.up);
         }
         
         if (Input.GetMouseButtonDown(0))
         {
-            AnimationManager.TriggerAttack();
-            Player.Attack();
+            player.Attack();
         }
     }
 
@@ -66,7 +64,7 @@ public class PlayerControls : MonoBehaviour
             moveVector += Vector3.right;
         }
 
-        PlayerRigidbody.velocity = (moveVector.normalized * MovementSpeed);
+        playerRigidbody.velocity = (moveVector.normalized * movementSpeed);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -74,8 +72,8 @@ public class PlayerControls : MonoBehaviour
         // nullify all velocity or angular velocity gained from colliding with enemies
         if (collision.gameObject.tag == "Enemy")
         {
-            PlayerRigidbody.velocity = Vector3.zero;
-            PlayerRigidbody.angularVelocity = Vector3.zero;
+            playerRigidbody.velocity = Vector3.zero;
+            playerRigidbody.angularVelocity = Vector3.zero;
         }
     }
 }

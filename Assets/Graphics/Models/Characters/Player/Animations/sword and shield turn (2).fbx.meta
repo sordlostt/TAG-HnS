@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 26f41f416c4319d4a8b3e10d49bf4870
+guid: 7fce04884a64cb84695f9bfcedefbd75
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Slash Inwards
+    second: mixamo.com
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -33,50 +33,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Slash Inwards
-      takeName: mixamo.com
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 45
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events:
-      - time: 0.35643566
-        functionName: OnAttackBegin
-        data: 
-        objectReferenceParameter: {fileID: 5792812899200514495, guid: f1d1c55e48a1a9643bed684bfe71d88b, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.5153383
-        functionName: OnAttackEnd
-        data: 
-        objectReferenceParameter: {fileID: 5792812899200514495, guid: f1d1c55e48a1a9643bed684bfe71d88b, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []

@@ -5,9 +5,9 @@ using UnityEngine;
 public class FollowPlayerCamera : MonoBehaviour
 {
     [SerializeField]
-    Vector3 CameraOffset;
+    Vector3 cameraOffset;
     [SerializeField]
-    public Vector3 CameraRotation;
+    public Vector3 cameraRotation;
 
     private Player Player;
 
@@ -18,7 +18,7 @@ public class FollowPlayerCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = new Vector3(Player.transform.position.x + CameraOffset.x, CameraOffset.y, Player.transform.position.z + CameraOffset.z);
-        transform.rotation = Quaternion.Euler(CameraRotation);
+        transform.position = new Vector3(Player.transform.position.x + cameraOffset.x, cameraOffset.y, Player.transform.position.z + cameraOffset.z);
+        transform.rotation = Quaternion.Euler(cameraRotation);
     }
 }

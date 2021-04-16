@@ -1,70 +1,124 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ICharacter
 {
-    [SerializeField]
-    float Health = 100.0f;
+    public Collider mainCollider;
 
-    public Transform AttackPoint;
-    public float AttackDelay;
-    public float AttackDamage;
-    public float AttackDistance;
-    public float AttackRange;
+    public EnemyHealthbar healthBar;
+    public float maxHealth = 100.0f;
+    float health;
 
-    public bool IsDead = false;
-    public bool CanAttack = true;
+    public float attackDelay;
+    public float attackDistance;
 
-    private float AttackTimer;
+    // time before body starts fading out
+    public float fadingTime;
+    // speed modifier for the body fading out process
+    public float fadingSpeed;
+    float fadingTimer;
+
+    public bool isDead = false;
+    public bool canAttack = true;
+
+    bool isAttacking;
+    bool isAttacked;
+    float attackTimer;
+
+    EnemyAnimationManager animationManager;
 
     private void Awake()
     {
-        AttackTimer = AttackDelay;
+        health = maxHealth;
+        attackTimer = attackDelay;
+        fadingTimer = fadingTime;
+        animationManager = gameObject.GetComponent<EnemyAnimationManager>();
     }
 
     public void SetDamage(float damage)
     {
-        Health -= damage;
+        health -= damage;
 
-        if (Health <= 0.0f)
+        if (health <= 0.0f)
         {
             OnDeath();
         }
-    }
-
-    private void OnDeath()
-    {
-        //TEMPORARY
-        IsDead = true;
-        gameObject.GetComponentInChildren<Collider>().enabled = false;
-        //Destroy(gameObject);
+        else
+        {
+            animationManager.TriggerOnDamage();
+        }
     }
 
     public void Attack()
     {
-        foreach (Collider collider in Physics.OverlapSphere(AttackPoint.position, AttackRange, LayerMask.GetMask("Player")))
+        if (canAttack)
         {
-            Player player = collider.GetComponentInParent<Player>();
-            //Gizmos.DrawSphere(AttackPoint.position, AttackRange);
-            if (player != null)
-            {
-                CanAttack = false;
-                StartCoroutine(SetAttackTimer());
-                player.SetDamage(AttackDamage);
-            }
+            canAttack = false;
+            animationManager.TriggerAttack();
+            StartCoroutine(SetAttackTimer());
         }
+    }
+
+    public void OnAttackBegin()
+    {
+        isAttacking = true;
+    }
+
+    public void OnAttackEnd()
+    {
+        isAttacking = false;
+    }
+
+    private void OnDeath()
+    {
+        isDead = true;
+        mainCollider.enabled = false;
+        healthBar.gameObject.SetActive(false);
+        NavMeshAgent navAgent = gameObject.GetComponent<NavMeshAgent>();
+        navAgent.isStopped = true;
+        navAgent.enabled = false;
+        StartCoroutine(StartFading());
     }
 
     public IEnumerator SetAttackTimer()
     {
-        while (AttackTimer > 0.0f)
+        while (attackTimer > 0.0f)
         {
-            AttackTimer -= Time.deltaTime;
+            attackTimer -= Time.deltaTime;
             yield return null;
         }
 
-        AttackTimer = AttackDelay;
-        CanAttack = true;
+        attackTimer = attackDelay;
+        canAttack = true;
+    }
+
+    public IEnumerator StartFading()
+    {
+        while (fadingTimer > 0.0f)
+        {
+            fadingTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        while (gameObject.transform.position.y > -10.0f)
+        {
+            gameObject.transform.Translate(Vector3.down * fadingSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        Destroy(gameObject);
+    }
+
+    public float GetHealth()
+    {
+        return health;
+    }
+
+    public bool IsAttacking()
+    {
+        return isAttacking;
     }
 }

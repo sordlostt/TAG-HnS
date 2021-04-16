@@ -2,54 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ICharacter
 {
-    float Health = 100.0f;
+    private float health = 100.0f;
 
-    public float AttackRange;
-    public float AttackDelay;
+    [SerializeField]
+    private float attackDelay;
 
-    public Transform AttackPoint;
+    private float attackTimer;
+    private bool canAttack = true;
+    private bool isAttacking = false;
 
-    private float AttackTimer;
-    public bool CanAttack = true;
+    private PlayerAnimationManager animationManager;
 
     private void Awake()
     {
-        AttackTimer = AttackDelay;
-    }
-
-    private void Update()
-    {
-
+        attackTimer = attackDelay;
+        animationManager = gameObject.GetComponent<PlayerAnimationManager>();
     }
 
     public void Attack()
     {
-        if (CanAttack)
+        if (canAttack)
         {
-            foreach (Collider collider in Physics.OverlapSphere(AttackPoint.position, AttackRange, LayerMask.GetMask("Enemy")))
-            {
-                Enemy enemy = collider.GetComponentInParent<Enemy>();
-                //Gizmos.DrawSphere(AttackPoint.position, AttackRange);
-                if (enemy != null)
-                {
-                    CanAttack = false;
-                    StartCoroutine(SetAttackTimer());
-                    enemy.SetDamage(50.0f);
-                }
-            }
+            canAttack = false;
+            StartCoroutine(SetAttackTimer());
+            animationManager.TriggerAttack();
         }
     }
 
     public void SetDamage(float damage)
     {
-        Health -= damage;
+        health -= damage;
 
-        if (Health <= 0.0f)
+        if (health <= 0.0f)
         {
             OnDeath();
         }
+    }
+
+    public void OnAttackBegin()
+    {
+        isAttacking = true;
+    }
+
+    public void OnAttackEnd()
+    {
+        isAttacking = false;
+    }
+
+    public bool IsAttacking()
+    {
+        return isAttacking;
     }
 
     private void OnDeath()
@@ -59,12 +63,12 @@ public class Player : MonoBehaviour
 
     private IEnumerator SetAttackTimer()
     {
-        while (AttackTimer > 0.0f)
+        while (attackTimer > 0.0f)
         {
-            AttackTimer -= Time.deltaTime;
+            attackTimer -= Time.deltaTime;
             yield return null;
         }
-        AttackTimer = AttackDelay;
-        CanAttack = true;
+        attackTimer = attackDelay;
+        canAttack = true;
     }
 }

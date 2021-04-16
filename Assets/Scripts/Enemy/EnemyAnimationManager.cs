@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class EnemyAnimationManager : MonoBehaviour
 {
-    public Animator Animator;
-    public Player Player;
+    public Animator animator;
 
     public void SetWalking(bool value)
     {
-        Animator.SetBool("Walking", value);
+        animator.SetBool("Walking", value);
     }
 
     public void SetDying(bool value)
     {
-        Animator.SetBool("Dead", value);
+        animator.SetBool("Dead", value);
     }
 
     public void TriggerAttack()
     {
-        Animator.SetTrigger("Attack");
+        animator.SetTrigger("Attack");
     }
 
-    public void ResetAttack()
+    public void TriggerOnDamage()
     {
-        Animator.ResetTrigger("Attack");
+        animator.SetTrigger("On Damage Received");
     }
 }

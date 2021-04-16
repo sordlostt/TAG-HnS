@@ -5,74 +5,77 @@ using UnityEngine.AI;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    Rigidbody EnemyRigidbody;
-    Player Player;
-    NavMeshAgent NavAgent;
-    EnemyAnimationManager AnimationManager;
-    Enemy Enemy;
+    Rigidbody enemyRigidbody;
+    Player player;
+    NavMeshAgent navAgent;
+    EnemyAnimationManager animationManager;
+    Enemy enemy;
+
     private void Start()
     {
-        Player = GameManager.instance.GetPlayer();
-        NavAgent = gameObject.GetComponent<NavMeshAgent>();
-        EnemyRigidbody = gameObject.GetComponent<Rigidbody>();
-        Enemy = gameObject.GetComponent<Enemy>();
-        AnimationManager = gameObject.GetComponent<EnemyAnimationManager>();
-        NavAgent.SetDestination(Player.transform.position);
+        player = GameManager.instance.GetPlayer();
+        navAgent = gameObject.GetComponent<NavMeshAgent>();
+        enemyRigidbody = gameObject.GetComponent<Rigidbody>();
+        enemy = gameObject.GetComponent<Enemy>();
+        animationManager = gameObject.GetComponent<EnemyAnimationManager>();
+        navAgent.SetDestination(player.transform.position);
     }
 
     Vector3 lastTargetPos = Vector3.zero;
 
     private void Update()
     {
-        if (!Enemy.IsDead)
+        if (!enemy.isDead)
         {
-            if (Player.transform.position != lastTargetPos)
-            {
-                NavAgent.SetDestination(Player.transform.position);
-            }
+            FollowPlayer();
 
-            Vector3 playerPositionAdjusted = new Vector3(Player.transform.position.x, transform.position.y, Player.transform.position.z);
-            transform.LookAt(playerPositionAdjusted, transform.up);
-            Debug.DrawRay(transform.position, transform.forward * 5.0f, Color.blue);
-
-            if (Vector3.Distance(Player.transform.position, Enemy.transform.position) <= NavAgent.stoppingDistance)
+            // stop the walking animation after crossing the navAgent stopping distance
+            if (Vector3.Distance(player.transform.position, enemy.transform.position) <= navAgent.stoppingDistance)
             {
-                AnimationManager.SetWalking(false);
+                animationManager.SetWalking(false);
             }
             else
             {
-                AnimationManager.SetWalking(true);
+                animationManager.SetWalking(true);
             }
 
-            if (Vector3.Distance(Player.transform.position, Enemy.transform.position) <= Enemy.AttackDistance && Enemy.CanAttack)
+            // attack player after getting within attack range
+            if (Vector3.Distance(player.transform.position, enemy.transform.position) <= enemy.attackDistance)
             {
-                AnimationManager.TriggerAttack();
-                Enemy.Attack();
+                enemy.Attack();
             }
-            else
-            {
-                AnimationManager.ResetAttack();
-            }
-
-            lastTargetPos = Player.transform.position;
         }
         else
         {
-            NavAgent.isStopped = true;
-            EnemyRigidbody.Sleep();
-            AnimationManager.SetDying(true);
-            AnimationManager.SetWalking(false);
+            enemyRigidbody.Sleep();
+            animationManager.SetDying(true);
+            animationManager.SetWalking(false);
         }
 
     }
 
+    private void FollowPlayer()
+    {
+        if (player.transform.position != lastTargetPos)
+        {
+            navAgent.SetDestination(player.transform.position);
+        }
+
+        Vector3 playerPositionYAdjusted = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+        transform.LookAt(playerPositionYAdjusted, transform.up);
+        Debug.DrawRay(transform.position, transform.forward * 5.0f, Color.blue);
+
+
+        lastTargetPos = player.transform.position;
+    }
+
     private void OnCollisionExit(Collision collision)
     {
-        // nullify all velocity or angular velocity gained from colliding with other enemies/player
+        // nullify all velocity or angular velocity gained from colliding with the player/other enemies
         if (collision.gameObject.layer == LayerMask.GetMask("Player, Enemy"))
         {
-            EnemyRigidbody.velocity = Vector3.zero;
-            EnemyRigidbody.angularVelocity = Vector3.zero;
+            enemyRigidbody.velocity = Vector3.zero;
+            enemyRigidbody.angularVelocity = Vector3.zero;
         }
     }
 }
