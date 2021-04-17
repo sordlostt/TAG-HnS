@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerAnimationManager : MonoBehaviour
 {
-    public Animator animator;
+    [SerializeField]
+    Animator animator;
     Rigidbody playerRigidbody;
 
     private void Awake()

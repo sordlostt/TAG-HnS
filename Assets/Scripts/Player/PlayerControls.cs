@@ -34,6 +34,7 @@ public class PlayerControls : MonoBehaviour
             if (Physics.Raycast(cameraRay, out hit, float.PositiveInfinity, floorMask))
             {
                 Debug.DrawLine(cameraRay.origin, hit.point, Color.red);
+
                 Vector3 hitPointYAdjusted = new Vector3(hit.point.x, player.transform.position.y, hit.point.z);
                 if (Vector3.Distance(hitPointYAdjusted, player.transform.position) >= minMouseFromPlayerDistance)
                 {

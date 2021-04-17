@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour, ICharacter
     [SerializeField]
     float attackDistance;
 
+    [SerializeField]
+    float damage;
+
     // time before body starts fading out
     [SerializeField]
     float bodyFadingTime;
@@ -45,6 +48,7 @@ public class Enemy : MonoBehaviour, ICharacter
         attackTimer = attackDelay;
         bodyFadingTimer = bodyFadingTime;
         animationManager = gameObject.GetComponent<EnemyAnimationManager>();
+        gameObject.GetComponentInChildren<Weapon>().AssignDamage(damage);
     }
 
     public void SetDamage(float damage, ICharacter attacker)

@@ -156,10 +156,9 @@ MonoBehaviour:
   maxHealth: 100
   attackDelay: 1
   attackDistance: 1.5
-  fadingTime: 15
-  fadingSpeed: 1
-  isDead: 0
-  canAttack: 1
+  damage: 15
+  bodyFadingTime: 30
+  bodyFadingSpeed: 0.5
 --- !u!114 &700764247082969717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,6 +724,14 @@ PrefabInstance:
     - target: {fileID: 2671192192467862525, guid: c5b63502ec391414693f0940d94e162c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4049234252181831475, guid: c5b63502ec391414693f0940d94e162c, type: 3}
+      propertyPath: m_Radius
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4049234252181831475, guid: c5b63502ec391414693f0940d94e162c, type: 3}
+      propertyPath: m_Center.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5479990322108862925, guid: c5b63502ec391414693f0940d94e162c, type: 3}
       propertyPath: m_Name

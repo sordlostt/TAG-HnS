@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyAnimationManager : MonoBehaviour
 {
-    public Animator animator;
+    [SerializeField]
+    Animator animator;
 
     public void SetWalking(bool value)
     {

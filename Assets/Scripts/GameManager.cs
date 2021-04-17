@@ -24,9 +24,6 @@ public class GameManager : MonoBehaviour
     GameState gameState;
 
     [SerializeField]
-    Player player;
-
-    [SerializeField]
     UIHandler UIHandler;
 
     //in minutes
@@ -37,10 +34,15 @@ public class GameManager : MonoBehaviour
     List<SpawningInterval> spawningIntervals = new List<SpawningInterval>();
 
     [SerializeField]
-    List<EnemySpawner> spawners = new List<EnemySpawner>();
+    List<Spawner> spawners = new List<Spawner>();
 
     [SerializeField]
     HeliBehaviour helicopter;
+
+    [SerializeField]
+    Spawner playerSpawner;
+
+    Player player;
 
     float levelTimer;
     float levelPercentage;
@@ -58,21 +60,28 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
 
+        player = playerSpawner.SpawnPlayerInstant();
+
         // make sure that the spawning list is sorted by level completion percentage
         spawningIntervals.Sort((p1, p2) => p1.levelPercentage.CompareTo(p2.levelPercentage));
         activeSpawningInterval = spawningIntervals[0].spawningInterval;
         spawningTimer = activeSpawningInterval;
+        // convert the game time to minutes
         gameTime *= 60.0f;
         levelTimer = 0.0f;
-        gameState = GameState.PLAYING;
         helicopter.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        gameState = GameState.PLAYING;
     }
 
     private void Update()
     {
         levelTimer += Time.deltaTime;
 
-        levelPercentage = levelTimer/gameTime;
+        levelPercentage = levelTimer/gameTime * 100.0f;
 
         foreach (SpawningInterval interval in spawningIntervals)
         {
@@ -121,8 +130,8 @@ public class GameManager : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        EnemySpawner spawnerToSpawn = spawners[Random.Range(0, spawners.Count)];
-        spawnerToSpawn.Spawn();
+        Spawner spawnerToSpawn = spawners[Random.Range(0, spawners.Count)];
+        spawnerToSpawn.SpawnEnemy();
     }
 
     public Player GetPlayer() { return player; }
@@ -140,5 +149,10 @@ public class GameManager : MonoBehaviour
     public float GetElapsedTime()
     {
         return levelTimer;
+    }
+
+    public void SetPlayer(Player player)
+    {
+        this.player = player;
     }
 }

@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 4
-  minMouseFromPlayerDistance: 0
+  minMouseFromPlayerDistance: 0.25
 --- !u!114 &5792812899200514432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  damage: 35
   attackDelay: 1
   healthRegenSpeed: 4
   healthRegenKickInTime: 10
