@@ -8,7 +8,6 @@ public class Weapon : MonoBehaviour
     HashSet<ICharacter> hitCharacters = new HashSet<ICharacter>();
     ICharacter owner;
 
-    [SerializeField]
     float damage;
 
     private void Awake()
@@ -34,5 +33,10 @@ public class Weapon : MonoBehaviour
                 character.SetDamage(damage, owner);
             }
         }
+    }
+
+    public void AssignDamage(float damage)
+    {
+        this.damage = damage;
     }
 }

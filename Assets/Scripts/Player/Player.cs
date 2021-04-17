@@ -4,23 +4,50 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, ICharacter
 {
-    public float maxHealth;
-    private float health = 100.0f;
+    [SerializeField]
+    float maxHealth;
 
     [SerializeField]
-    private float attackDelay;
+    float damage;
 
-    private float attackTimer;
-    private bool canAttack = true;
-    private bool isAttacking = false;
+    [SerializeField]
+    float attackDelay;
 
-    private PlayerAnimationManager animationManager;
+    [SerializeField]
+    float healthRegenSpeed;
+
+    [SerializeField]
+    float healthRegenKickInTime;
+
+    float healthRegenTimer;
+    float health = 100.0f;
+    float attackTimer;
+
+    bool canAttack = true;
+    bool isAttacking = false;
+
+    PlayerAnimationManager animationManager;
 
     private void Awake()
     {
         attackTimer = attackDelay;
         animationManager = gameObject.GetComponent<PlayerAnimationManager>();
         health = maxHealth;
+        healthRegenTimer = healthRegenKickInTime;
+        gameObject.GetComponentInChildren<Weapon>().AssignDamage(damage);
+    }
+
+    private void Update()
+    {
+        if (health < maxHealth)
+        {
+            healthRegenTimer -= Time.deltaTime;
+
+            if (healthRegenTimer <= 0.0f)
+            {
+                health += healthRegenSpeed * Time.deltaTime;
+            }
+        }
     }
 
     public void Attack()
@@ -38,7 +65,9 @@ public class Player : MonoBehaviour, ICharacter
         if (attacker is Enemy)
         {
             health -= damage;
-
+            healthRegenTimer = healthRegenKickInTime;
+            // end current attack
+            isAttacking = false;
             if (health <= 0.0f && GameManager.instance.GetGameState() == GameManager.GameState.PLAYING)
             {
                 OnDeath();
@@ -48,11 +77,6 @@ public class Player : MonoBehaviour, ICharacter
                 animationManager.TriggerDamage();
             }
         }
-    }
-
-    public float GetHealth()
-    {
-        return health;
     }
 
     public void OnAttackBegin()
@@ -74,7 +98,6 @@ public class Player : MonoBehaviour, ICharacter
     {
         animationManager.SetDying();
         GameManager.instance.OnPlayerDied();
-        //die
     }
 
     private IEnumerator SetAttackTimer()
@@ -87,4 +110,15 @@ public class Player : MonoBehaviour, ICharacter
         attackTimer = attackDelay;
         canAttack = true;
     }
+
+    public float GetHealth()
+    {
+        return health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }

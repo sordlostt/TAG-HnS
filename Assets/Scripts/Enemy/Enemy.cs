@@ -6,27 +6,36 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour, ICharacter
 {
-    public Collider mainCollider;
+    [SerializeField]
+    Collider mainCollider;
 
-    public EnemyHealthbar healthBar;
-    public float maxHealth = 100.0f;
-    float health;
+    [SerializeField]
+    EnemyHealthbar healthBar;
 
-    public float attackDelay;
-    public float attackDistance;
+    [SerializeField]
+    float maxHealth = 100.0f;
+
+    [SerializeField]
+    float attackDelay;
+
+    [SerializeField]
+    float attackDistance;
 
     // time before body starts fading out
-    public float fadingTime;
+    [SerializeField]
+    float bodyFadingTime;
+
     // speed modifier for the body fading out process
-    public float fadingSpeed;
-    float fadingTimer;
+    [SerializeField]
+    float bodyFadingSpeed;
 
-    public bool isDead = false;
-    public bool canAttack = true;
-
-    bool isAttacking;
-    bool isAttacked;
+    float health;
+    float bodyFadingTimer;
     float attackTimer;
+
+    bool isDead = false;
+    bool canAttack = true;
+    bool isAttacking = false;
 
     EnemyAnimationManager animationManager;
 
@@ -34,7 +43,7 @@ public class Enemy : MonoBehaviour, ICharacter
     {
         health = maxHealth;
         attackTimer = attackDelay;
-        fadingTimer = fadingTime;
+        bodyFadingTimer = bodyFadingTime;
         animationManager = gameObject.GetComponent<EnemyAnimationManager>();
     }
 
@@ -43,7 +52,7 @@ public class Enemy : MonoBehaviour, ICharacter
         if (attacker is Player)
         {
             health -= damage;
-
+            isAttacking = false;
             if (health <= 0.0f)
             {
                 OnDeath();
@@ -100,15 +109,15 @@ public class Enemy : MonoBehaviour, ICharacter
 
     public IEnumerator StartFading()
     {
-        while (fadingTimer > 0.0f)
+        while (bodyFadingTimer > 0.0f)
         {
-            fadingTimer -= Time.deltaTime;
+            bodyFadingTimer -= Time.deltaTime;
             yield return null;
         }
 
         while (gameObject.transform.position.y > -1.0f)
         {
-            transform.Translate(Vector3.down * fadingSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * bodyFadingSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -120,8 +129,23 @@ public class Enemy : MonoBehaviour, ICharacter
         return health;
     }
 
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
     public bool IsAttacking()
     {
         return isAttacking;
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+
+    public float GetAttackDistance()
+    {
+        return attackDistance;
     }
 }

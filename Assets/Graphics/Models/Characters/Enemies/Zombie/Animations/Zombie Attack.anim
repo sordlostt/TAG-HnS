@@ -79629,14 +79629,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.46666667
+  - time: 0.8333333
     functionName: OnAttackBegin
     data: 
     objectReferenceParameter: {fileID: 700764247082969718, guid: a64cb133117a2f3439b578ab2b570352, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2333333
+  - time: 1.1333333
     functionName: OnAttackEnd
     data: 
     objectReferenceParameter: {fileID: 700764247082969718, guid: a64cb133117a2f3439b578ab2b570352, type: 3}

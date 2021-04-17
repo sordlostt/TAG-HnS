@@ -20,6 +20,6 @@ public class EnemyHealthbar : MonoBehaviour
     {
         // act like a billboard
         canvas.transform.LookAt(canvas.transform.position + Camera.main.transform.forward);
-        slider.value = enemy.GetHealth() / enemy.maxHealth;
+        slider.value = enemy.GetHealth() / enemy.GetMaxHealth();
     }
 }

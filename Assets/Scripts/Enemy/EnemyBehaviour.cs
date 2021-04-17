@@ -25,35 +25,38 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (!enemy.isDead)
+        if (GameManager.instance.GetGameState() == GameManager.GameState.PLAYING)
         {
-            FollowPlayer();
-
-            // zero out rigidbody velocity and angular velocity
-            enemyRigidbody.velocity = Vector3.zero;
-            enemyRigidbody.angularVelocity = Vector3.zero;
-
-            // stop the walking animation after crossing the navAgent stopping distance
-            if (Vector3.Distance(player.transform.position, enemy.transform.position) <= navAgent.stoppingDistance)
+            if (!enemy.IsDead())
             {
-                animationManager.SetWalking(false);
+                FollowPlayer();
+
+                // zero out rigidbody velocity and angular velocity
+                enemyRigidbody.velocity = Vector3.zero;
+                enemyRigidbody.angularVelocity = Vector3.zero;
+
+                // stop the walking animation after crossing the navAgent stopping distance
+                if (Vector3.Distance(player.transform.position, enemy.transform.position) <= navAgent.stoppingDistance)
+                {
+                    animationManager.SetWalking(false);
+                }
+                else
+                {
+                    animationManager.SetWalking(true);
+                }
+
+                // attack player after getting within attack range
+                if (Vector3.Distance(player.transform.position, enemy.transform.position) <= enemy.GetAttackDistance())
+                {
+                    enemy.Attack();
+                }
             }
             else
             {
-                animationManager.SetWalking(true);
+                enemyRigidbody.isKinematic = true;
+                animationManager.SetDying(true);
+                animationManager.SetWalking(false);
             }
-
-            // attack player after getting within attack range
-            if (Vector3.Distance(player.transform.position, enemy.transform.position) <= enemy.attackDistance)
-            {
-                enemy.Attack();
-            }
-        }
-        else
-        {
-            enemyRigidbody.isKinematic = true;
-            animationManager.SetDying(true);
-            animationManager.SetWalking(false);
         }
 
     }
